@@ -14,7 +14,10 @@ namespace WindowsFormsApp4
     public partial class Form1 : Form
     {
 
-        Machine machine = new Machine();
+        VirtualMachine machine = new VirtualMachine();
+
+        Dictionary<MachineParts, Label> partToLabel;
+
         public Form1()
         {
             InitializeComponent();
@@ -22,7 +25,7 @@ namespace WindowsFormsApp4
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            
+
 
         }
 
@@ -32,7 +35,7 @@ namespace WindowsFormsApp4
         }
 
         protected override void OnPaint(PaintEventArgs e)
-        { 
+        {
         }
 
         private void Button1_Paint(object sender, PaintEventArgs e)
@@ -47,46 +50,15 @@ namespace WindowsFormsApp4
 
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
-         }
+
+        }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            Color ActiveColor = Color.SpringGreen;
             clearLableBoxes();
-             foreach (var item in machine.Apples)
+            foreach (var item in partToLabel)
             {
-                switch (item.location)
-                {
-                    case MachineParts.FirstTrackStart:
-                        labelFirstTrackStart.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.CorruptionCheck:
-                        labelCorruptionCheck.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.CorruptedBasket:
-                        labelCorruptionBasket.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.FirstTrackEnd:
-                        labelFirstTrackEnd.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.SizeCheck:
-                        labelSizeCheck.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.BigSizeTrack:
-                        labelBigSizeTrack.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.SmallSizeTrack:
-                        labelSmallSizeTrack.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.BigBasket:
-                        labelBigSizeBasket.BackColor = ActiveColor;
-                        break;
-                    case MachineParts.SmallBasket:
-                        labelSmallSizeBasket.BackColor = ActiveColor;
-                        break;
-                    default:
-                        break;
-                }
+                item.Value.BackColor = machine.Parts[item.Key].apple != null ? Color.SpringGreen : Color.Silver;
             }
             machine.run();
         }
@@ -107,12 +79,20 @@ namespace WindowsFormsApp4
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            machine.addApple(AppleSize.Big, false);
+            machine.addApple(new Apple(AppleSize.Big, false));
+            partToLabel = new Dictionary<MachineParts, Label>
+                            {
+                                {MachineParts.FirstTrackStart , labelFirstTrackStart},
+                                 {MachineParts.CorruptionCheck , labelCorruptionCheck},
+                                  {MachineParts.CorruptedBasket , labelCorruptionBasket},
+                                   {MachineParts.FirstTrackEnd , labelFirstTrackEnd},
+                                    {MachineParts.SizeCheck , labelSizeCheck},
+                            };
         }
 
         private void Button1_Click_1(object sender, EventArgs e)
         {
-            machine.addApple(radioSizeBig.Checked ? AppleSize.Big : AppleSize.Small, checkBoxIsCorrupted.Checked);
+            machine.addApple(new Apple(radioSizeBig.Checked ? AppleSize.Big : AppleSize.Small, checkBoxIsCorrupted.Checked));
         }
     }
 }

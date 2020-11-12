@@ -21,92 +21,90 @@ namespace WindowsFormsApp4
     }
 
 
-    class FirstTrackStart : MachinePart
+    abstract class VMachinePart
     {
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
+        public Apple apple = null;
+
+
+        abstract public void updateSensors(); // Activate Ins 
+        abstract public MachineParts? takeAction(); // Check Outs then move apples accordingly
+
+    }
+
+    class FirstTrackStart : VMachinePart
+    {
+        public override MachineParts? takeAction()
         {
-            apple.location = MachineParts.CorruptionCheck;
+
+            if (Lpt.getOutputs(0))
+                return MachineParts.CorruptionCheck;
+
+            return null;
+
+        }
+
+        public override void updateSensors()
+        {
+            //Activate Sensor if apple exist
+            Lpt.setInputs(3, apple != null);
         }
     }
 
-    class CorruptionCheck : MachinePart
+    class CorruptionCheck : VMachinePart
     {
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
+        public override void updateSensors()
         {
-            if (apple.apple.isCorrupted)
-            {
-                apple.location = MachineParts.CorruptedBasket;
-                // Use the Pusher 
-            }
-            else
-            {
-                apple.location = MachineParts.FirstTrackEnd;
-            }
+            Lpt.setInputs(3, apple != null && apple.isCorrupted);
+
+        }
+
+        public override MachineParts? takeAction()
+        {
+
+            if (Lpt.getOutputs(1))
+                return MachineParts.CorruptedBasket;
+
+            return MachineParts.FirstTrackEnd;
         }
     }
 
-
-    class CorruptedBasket : MachinePart
+    class FirstTrackEnd : VMachinePart
     {
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
+        public override void updateSensors()
+        {
+        }
+
+        public override MachineParts? takeAction()
         {
 
-            apple.toBeRemoved = true;
+            return MachineParts.SizeCheck;
         }
     }
 
-    class FirstTrackEnd : MachinePart
+    class CorruptedBasket : VMachinePart
     {
-        MachineParts part = MachineParts.FirstTrackEnd;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
+        public override void updateSensors()
         {
-            apple.location = MachineParts.SizeCheck;
+
+        }
+
+        public override MachineParts? takeAction()
+        {
+            return null;
         }
     }
 
-    class SizeCheck : MachinePart
+    class SizeCheck : VMachinePart
     {
-        MachineParts part = MachineParts.SizeCheck;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
+        public override void updateSensors()
         {
-            if (apple.apple.size == AppleSize.Big) apple.location = MachineParts.BigSizeTrack;
-            else apple.location = MachineParts.SmallSizeTrack;
+
+        }
+
+        public override MachineParts? takeAction()
+        {
+            return null;
         }
     }
 
-    class BigSizeTrack : MachinePart
-    {
-        MachineParts part = MachineParts.BigSizeTrack;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
-        {
-            apple.location = MachineParts.BigBasket;
-        }
-    }
-
-    class SmallSizeTrack : MachinePart
-    {
-        MachineParts part = MachineParts.SmallSizeTrack;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
-        {
-            apple.location = MachineParts.SmallBasket;
-        }
-    }
-
-    class BigBasket : MachinePart
-    {
-        MachineParts part = MachineParts.BigBasket;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
-        {
-            apple.toBeRemoved = true;
-        }
-    }
-
-    class SmallBasket : MachinePart
-    {
-        MachineParts part = MachineParts.SmallBasket;
-        public void run(List<AppleInMachine> apples, AppleInMachine apple)
-        {
-            apple.toBeRemoved = true;
-        }
-    }
 }
