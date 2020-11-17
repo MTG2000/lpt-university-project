@@ -79,14 +79,18 @@ namespace WindowsFormsApp4
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            machine.addApple(new Apple(AppleSize.Big, false));
+            machine.addApple(new Apple(AppleSize.Small, false));
             partToLabel = new Dictionary<MachineParts, Label>
                             {
                                 {MachineParts.FirstTrackStart , labelFirstTrackStart},
-                                 {MachineParts.CorruptionCheck , labelCorruptionCheck},
-                                  {MachineParts.CorruptedBasket , labelCorruptionBasket},
-                                   {MachineParts.FirstTrackEnd , labelFirstTrackEnd},
-                                    {MachineParts.SizeCheck , labelSizeCheck},
+                                {MachineParts.CorruptionCheck , labelCorruptionCheck},
+                                {MachineParts.CorruptedBasket , labelCorruptionBasket},
+                                {MachineParts.FirstTrackEnd , labelFirstTrackEnd},
+                                {MachineParts.SizeCheck , labelSizeCheck},
+                                {MachineParts.BigSizeTrack,labelBigSizeTrack},
+                                {MachineParts.SmallSizeTrack,labelSmallSizeTrack },
+                                {MachineParts.BigBasket,labelBigSizeBasket },
+                                {MachineParts.SmallBasket,labelSmallSizeBasket }
                             };
         }
 

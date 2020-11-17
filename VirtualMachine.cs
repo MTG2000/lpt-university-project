@@ -13,10 +13,15 @@ namespace WindowsFormsApp4
             { MachineParts.CorruptionCheck ,new CorruptionCheck() },
             { MachineParts.CorruptedBasket ,new CorruptedBasket() },
             { MachineParts.FirstTrackEnd ,new FirstTrackEnd() },
-             { MachineParts.SizeCheck ,new SizeCheck() },
+            { MachineParts.SizeCheck ,new SizeCheck() },
+            { MachineParts.BigSizeTrack ,new BigSizeTrack() },
+            { MachineParts.SmallSizeTrack ,new SmallSizeTrack() },
+            { MachineParts.BigBasket ,new BigBasket() },
+            { MachineParts.SmallBasket ,new SmallBasket() },
+
         };
 
-        public Dictionary<MachineParts, VMachinePart> Parts { get => parts;  }
+        public Dictionary<MachineParts, VMachinePart> Parts { get => parts; }
 
         public void addApple(Apple apple)
         {
@@ -26,13 +31,20 @@ namespace WindowsFormsApp4
         public void run()
         {
             Dictionary<MachineParts, Apple> newLocations = new Dictionary<MachineParts, Apple>();
+
+            // check all sensors and (de)activate according to apples states
+
             foreach (var part in parts.Values)
             {
                 part.updateSensors();
             }
 
             // Call The Program so that it reacts to sensors changes and changes the outputs
-            // Program.run();
+
+            MachineProgram.run();
+
+
+            // Move the apples to the next part according to Program Orders
 
             foreach (var part in parts.Values)
             {
@@ -45,14 +57,14 @@ namespace WindowsFormsApp4
 
             }
 
-            
+
 
             foreach (var loc in newLocations)
             {
                 parts[loc.Key].apple = loc.Value;
             }
 
-            
+
         }
     }
 

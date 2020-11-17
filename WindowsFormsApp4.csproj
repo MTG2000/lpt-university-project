@@ -54,7 +54,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Lpt.cs" />
+    <Compile Include="LPTWrapper.cs" />
     <Compile Include="MachineParts.cs" />
+    <Compile Include="MachineProgram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VirtualMachine.cs" />

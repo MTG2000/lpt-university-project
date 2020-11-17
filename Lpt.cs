@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp4
 {
-    class Lpt
+    static class LPT
     {
-        static public string ins= "00000000", outs= "00000000";
-
-    
-
-        static public void setInputs(int index, bool value)
+        static byte Input;
+        static byte Output;
+        public static void setInput(byte i)
         {
-            outs.ToCharArray()[index] = value ? '1' : '0';
+            Input = i ;
+        }
+        public static byte getInput()
+        {
+            return Input;
+        }
+        public static void setOutput(byte o)
+        {
+            Output = o;
+        }
+        public static byte getOutput()
+        {
+            return Output;
         }
 
-        static public bool getOutputs(int index)
-        {
-            if (index >= 0 && index < ins.Length)
-                return ins[index] == 1;
-            return false;
-        }
     }
 }
