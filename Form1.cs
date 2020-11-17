@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,71 +17,43 @@ namespace WindowsFormsApp4
 
         VirtualMachine machine = new VirtualMachine();
 
-        Dictionary<MachineParts, Label> partToLabel;
+        Dictionary<MachineParts, Guna2Chip> partToLabel;
+        Color ActiveBackgroundColor = Color.LimeGreen, ActiveFontColor = Color.White, DisabledBackgroundColor = Color.Silver, DisabledFontColor = Color.Black;
 
         public Form1()
         {
             InitializeComponent();
         }
-
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
+ 
 
 
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-        }
-
-        private void Button1_Paint(object sender, PaintEventArgs e)
-        {
-            // Create image.
-            Image imageFile = Image.FromFile("android.png");
-
-
-            // Draw image to screen.
-            e.Graphics.DrawImage(imageFile, new PointF(120.0F, 120.0F));
-        }
-
-        private void PictureBox1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
             clearLableBoxes();
             foreach (var item in partToLabel)
             {
-                item.Value.BackColor = machine.Parts[item.Key].apple != null ? Color.SpringGreen : Color.Silver;
+                item.Value.FillColor = machine.Parts[item.Key].apple != null ? ActiveBackgroundColor : DisabledBackgroundColor;
+                item.Value.ForeColor = machine.Parts[item.Key].apple != null ? ActiveFontColor : DisabledFontColor;
             }
             machine.run();
         }
 
         private void clearLableBoxes()
         {
-            labelFirstTrackStart.BackColor = Color.Silver;
-            labelCorruptionCheck.BackColor = Color.Silver;
-            labelCorruptionBasket.BackColor = Color.Silver;
-            labelFirstTrackEnd.BackColor = Color.Silver;
-            labelSizeCheck.BackColor = Color.Silver;
-            labelBigSizeTrack.BackColor = Color.Silver;
-            labelBigSizeBasket.BackColor = Color.Silver;
-            labelSmallSizeTrack.BackColor = Color.Silver;
-            labelSmallSizeBasket.BackColor = Color.Silver;
+            foreach (var item in partToLabel)
+            {
+                item.Value.FillColor = DisabledFontColor;
+                item.Value.ForeColor = DisabledFontColor;
+
+            }
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             machine.addApple(new Apple(AppleSize.Small, false));
-            partToLabel = new Dictionary<MachineParts, Label>
+            partToLabel = new Dictionary<MachineParts, Guna2Chip>
                             {
                                 {MachineParts.FirstTrackStart , labelFirstTrackStart},
                                 {MachineParts.CorruptionCheck , labelCorruptionCheck},
@@ -94,9 +67,16 @@ namespace WindowsFormsApp4
                             };
         }
 
-        private void Button1_Click_1(object sender, EventArgs e)
+
+
+        private void Guna2Button1_Click(object sender, EventArgs e)
         {
             machine.addApple(new Apple(radioSizeBig.Checked ? AppleSize.Big : AppleSize.Small, checkBoxIsCorrupted.Checked));
+        }
+
+        private void Guna2RadioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
